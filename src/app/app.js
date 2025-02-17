@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 
-app.use("/users", Usuario);
-app.use("/products", Producto);
+app.use("/appMovil", Usuario);
+app.use("/appMovil", Producto);
 
 module.exports = app;

@@ -3,7 +3,7 @@ const Product = require('../models/ProductModel');
 const multer = require("multer");
 const { Op } = require('sequelize');
 
-router.get("/", async (req, res) => {
+router.get("/products/", async (req, res) => {
   try {
     const products = await Product.findAll();
       const productsWithBase64Images = products.map(product => {
@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/products/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const product = await Product.findOne({ where: { id: id } });
@@ -41,7 +41,7 @@ router.get("/:id", async (req, res) => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-router.post("/", upload.single("image"), async (req, res) => {
+router.post("/products/", upload.single("image"), async (req, res) => {
   const { nombre, precio } = req.body;
   const imagenBuffer = req.file ? req.file.buffer : null;
   try {
@@ -58,7 +58,7 @@ router.post("/", upload.single("image"), async (req, res) => {
   }
 });
 
-router.put("/",upload.single("image"), async (req, res) => {
+router.put("/products/",upload.single("image"), async (req, res) => {
     const { nombre, nuevoNombre, precio } = req.body;
     const imagenBuffer = req.file ? req.file.buffer : null;
     try {
@@ -80,18 +80,19 @@ router.put("/",upload.single("image"), async (req, res) => {
     }
   });
   
-router.delete("/:nombre", async (req, res) => {
-    const { nombre } = req.params;
+  router.delete("/products/:id", async (req, res) => {
     try {
-        const product = await Product.findOne({ where: { nombre: nombre } });
-        if (product) {
-            await product.destroy();
-            res.json({ message: "Producto eliminado" });
-        } else {
-        res.status(404).json({ error: "Producto no encontrado" });
-        }
+      const { id } = req.params;
+      const product = await Product.findOne({ where: { id: id } });
+  
+      if (!product) {
+        return res.status(404).json({ error: "Producto no encontrado" });
+      }
+  
+      await product.destroy();  
+      res.status(200).json({ message: "Producto eliminado con éxito" });
     } catch (error) {
-      res.status(500).json({ error: "Ha ocurrido un error" });
+      res.status(500).json({ error: "Error al eliminar el producto" });
     }
   });
   

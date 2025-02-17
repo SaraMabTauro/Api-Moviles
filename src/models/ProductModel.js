@@ -18,7 +18,7 @@ const Product = sequelize.define('Product', {
     },
     imagen:{
         type: DataTypes.BLOB("medium"),
-        allowNull: false
+        allowNull: true
     }
 },
  {

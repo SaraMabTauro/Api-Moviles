@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Usuario = require("../models/UsuarioModel");
 
-router.get("/", async (req, res) => {
+router.get("/users/", async (req, res) => {
   try { 
     const user = await Usuario.findAll();
     res.send(user);
@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/login",async (req, res) => {
+router.post("/users/login",async (req, res) => {
   const { email, password } = req.body;
   try { 
     const user = await Usuario.findOne({where: {email: email , password: password}});
@@ -25,7 +25,7 @@ router.post("/login",async (req, res) => {
   }
 });
 
-router.post("/add", async (req, res) => {
+router.post("/users/add", async (req, res) => {
   const {name, email, password } = req.body;
   try { 
     await Usuario.sync()
@@ -42,7 +42,7 @@ router.post("/add", async (req, res) => {
 });
 
 
-router.put("/update/:usuario_id", async (req, res) => {
+router.put("/users/update/:usuario_id", async (req, res) => {
   const usuario_id = req.params.usuario_id;
   const { nombre, email } = req.body;
   try { 
@@ -56,7 +56,7 @@ router.put("/update/:usuario_id", async (req, res) => {
   }
 });
 
-router.delete("/delete/:usuario_id", async (req, res) => {
+router.delete("/users/delete/:usuario_id", async (req, res) => {
   try { 
     const usuario = await Usuario.destroy({ where: { usuario_id: req.params.usuario_id} });
     res.send("Usuario eliminado correctamente");
